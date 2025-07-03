@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>8085 Simulator</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+  <div class="container">
+    <div class="editor">
+      <form method="post" action="{{ url_for('index') }}">
+        <textarea name="code" rows="15">{{ code_text }}</textarea>
+        <button name="new_code" type="submit">Load Code</button>
+      </form>
+      <div class="controls">
+        <form method="post" action="{{ url_for('step') }}">
+          <button type="submit">Step</button>
+        </form>
+        <form method="post" action="{{ url_for('run') }}">
+          <button type="submit">Run</button>
+        </form>
+        <form method="post" action="{{ url_for('reset') }}">
+          <button type="submit">Reset</button>
+        </form>
+      </div>
+    </div>
+    <div class="state">
+      <h2>Code</h2>
+      <pre>
+{% for line in code_text.splitlines() %}
+  <span class="{% if loop.index0 == pc %}current{% endif %}">{{ line }}</span>
+{% endfor %}
+      </pre>
+      <h2>Registers</h2>
+      <div class="registers">
+{% for r, v in regs.items() %}
+        <div>{{ r }}: {{ v }}</div>
+{% endfor %}
+      </div>
+      <h2>Memory [0x00–0x0F]</h2>
+      <div class="memory">
+{% for byte in mem %}
+        <div>0x{{ "%02X"|format(loop.index0) }}: {{ byte }}</div>
+{% endfor %}
+      </div>
+    </div>
+  </div>
+</body>
+</html>
